@@ -1,0 +1,13 @@
+{% include 'nav.html' %}
+{% block content %}
+<div class="container my-5 text-center">
+    <div class="card p-5 shadow-sm">
+        <h2 class="mb-3">✅ Order Placed Successfully!</h2>
+        <p>Thank you, {{ order.first_name }}! Your order has been placed.</p>
+        <p><strong>Order ID:</strong> {{ order.order_number }}</p>
+        <p><strong>Total:</strong> ₹{{ order.total }}</p>
+        {% comment %} <a href="{% url 'product_list' %}" class="btn btn-primary mt-4">Continue Shopping</a> {% endcomment %}
+    </div>
+</div>
+{% endblock %}
+{% include 'footer.html' %}

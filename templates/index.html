@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <title>Just lib bling</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="author" content="TemplatesJungle">
+  <meta name="keywords" content="ecommerce,fashion,store">
+  <meta name="description" content="Bootstrap 5 Fashion Store HTML CSS Template">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/vendor.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Marcellus&display=swap"
+    rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+      body {
+        font-family:  Baskerville Old Face, serif !important;
+        overflow-x: hidden;
+      } 
+     
+      .bg-light1 {
+        background-color:#6D7D63 !important;
+        color : #EADAC0 !important;
+      }
+      .bg-light2 {
+        background-color:#6D7D63 !important;
+        
+      }
+        .category-card {
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          cursor: pointer;
+        }
+      
+        .category-card:hover {
+          transform: scale(1.05);
+          box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+      
+        .category-title {
+          transition: color 0.3s ease;
+        }
+      
+        .category-card:hover .category-title {
+          color: #d4af37; /* Gold shade */
+        }
+      </style>
+</head>
+
+<body class="homepage">
+ 
+
+  {% include 'nav.html' %}  
+
+  <div class="modal fade" id="promoModal" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+  
+        <div class="modal-header">
+          <h5 class="modal-title" id="promoModalLabel">🎁 Subscribe & Get 10% Off! Only First Order</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="dismissPromo()"></button>
+        </div>
+  
+        <div class="modal-body">
+  
+          <!-- Subscribe Form -->
+          <form id="subscribeForm" method="post" action="{% url 'subscribe_email' %}">
+            {% csrf_token %}
+            <input type="email" name="email" class="form-control mb-3" required placeholder="Your email">
+            <button type="submit" class="btn btn-primary w-100">Subscribe</button>
+          </form>
+  
+          <!-- Thank You Message -->
+          <div id="thankYouMessage" class="text-center d-none">
+            <h5 class="text-success">🎉 Thank you for subscribing!</h5>
+            <p>Your 10% OFF coupon code has been sent to your email.</p>
+          </div>
+  
+          <button class="btn btn-link text-muted w-100" onclick="dismissPromo()" data-bs-dismiss="modal">No Thanks</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+
+
+
+  <div id="carouselExampleCaptions" class="carousel slide mb-1" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      {% for banner in banners %}
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %} aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
+      {% endfor %}
+    </div>
+  
+    <div class="carousel-inner">
+      {% for banner in banners %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <img src="{{ banner.image.url }}" class="d-block w-100" alt="{{ banner.title }}" style="height: auto; object-fit: cover;">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>{{ banner.title }}</h5>
+            <p>{{ banner.description }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  {% comment %} <section id="billboard" class="bg-light1 py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <h3 class="section-title text-center mt-4" data-aos="fade-up">New Collections</h3>
+        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe voluptas ut dolorum consequuntur, adipisci
+            repellat! Eveniet commodi voluptatem voluptate, eum minima, in suscipit explicabo voluptatibus harum,
+            quibusdam ex repellat eaque!</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="swiper main-swiper py-4" data-aos="fade-up" data-aos-delay="600">
+          <div class="swiper-wrapper d-flex border-animation-left">
+            <div class="swiper-slide">
+              <div class="banner-item image-zoom-effect">
+                <div class="image-holder">
+                  <a href="#">
+                    <img src="{% static 'images/cat-item5.jpeg' %}" alt="product" class="img-fluid">
+                  </a>
+                </div>
+                <div class="banner-content py-4">
+                  <h5 class="element-title text-uppercase">
+                    <a href="index.html" class="item-anchor">lorem ipsum dolor</a>
+                    </a>
+                  </h5>
+                  <p>Scelerisque duis aliquam qui lorem ipsum dolor amet, consectetur adipiscing elit.</p>
+                  <div class="btn-left">
+                    <a href="#" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">Discover Now</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="banner-item image-zoom-effect">
+                <div class="image-holder">
+                  <a href="#">
+                    <img src="{% static 'images/cat-item6.jpeg' %}" alt="product" class="img-fluid">
+                  </a>
+                </div>
+                <div class="banner-content py-4">
+                  <h5 class="element-title text-uppercase">
+                    <a href="index.html" class="item-anchor">lorem ipsum dolor</a>
+                  </h5>
+                  <p>Scelerisque duis aliquam qui lorem ipsum dolor amet, consectetur adipiscing elit.</p>
+                  <div class="btn-left">
+                    <a href="#" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">Discover Now</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="banner-item image-zoom-effect">
+                <div class="image-holder">
+                  <a href="#">
+                    <img src="{% static 'images/cat-item7.jpeg' %}" alt="product" class="img-fluid">
+                  </a>
+                </div>
+                <div class="banner-content py-4">
+                  <h5 class="element-title text-uppercase">
+                    <a href="index.html" class="item-anchor">lorem ipsum dolor</a>
+                  </h5>
+                  <p>Scelerisque duis aliquam qui lorem ipsum dolor amet, consectetur adipiscing elit.</p>
+                  <div class="btn-left">
+                    <a href="#" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">Discover Now</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="banner-item image-zoom-effect">
+                <div class="image-holder">
+                  <a href="#">
+                    <img src="{% static 'images/banner-image-3.jpg' %}" alt="product" class="img-fluid">
+                  </a>
+                </div>
+                <div class="banner-content py-4">
+                  <h5 class="element-title text-uppercase">
+                    <a href="index.html" class="item-anchor">Soft leather jackets</a>
+                  </h5>
+                  <p>Scelerisque duis aliquam qui lorem ipsum dolor amet, consectetur adipiscing elit.</p>
+                  <div class="btn-left">
+                    <a href="#" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">Discover Now</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="banner-item image-zoom-effect">
+                <div class="image-holder">
+                  <a href="#">
+                    <img src="{% static 'images/banner-image-4.jpg' %}" alt="product" class="img-fluid">
+                  </a>
+                </div>
+                <div class="banner-content py-4">
+                  <h5 class="element-title text-uppercase">
+                    <a href="index.html" class="item-anchor">Out crop sweater</a>
+                  </h5>
+                  <p>Scelerisque duis aliquam qui lorem ipsum dolor amet, consectetur adipiscing elit.</p>
+                  <div class="btn-left">
+                    <a href="#" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">Discover Now</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="banner-item image-zoom-effect">
+                <div class="image-holder">
+                  <a href="#">
+                    <img src="{% static 'images/banner-image-5.jpg' %}" alt="product" class="img-fluid">
+                  </a>
+                </div>
+                <div class="banner-content py-4">
+                  <h5 class="element-title text-uppercase">
+                    <a href="index.html" class="item-anchor">Soft leather jackets</a>
+                  </h5>
+                  <p>Scelerisque duis aliquam qui lorem ipsum dolor amet, consectetur adipiscing elit.</p>
+                  <div class="btn-left">
+                    <a href="#" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">Discover Now</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+       
+      </div>
+    </div>
+  </section> {% endcomment %}
+
+  <!-- Featured Categories Section -->
+  <section class="features py-5">
+    <div class="container my-5">
+    <svg width="38" height="38" viewBox="0 0 24 24">
+      <use xlink:href="#calendar"></use>
+    </svg>
+    
+    <h2 class="text-center mb-4">FEATURED CATEGORIES</h2>
+    <div class="row justify-content-center g-4">
+        
+        <!-- Category 1: Ring -->
+        <div class="col-6 col-sm-4 col-md-3 text-center">
+          <a href="{% url 'product' 'Ring' %}">
+            <div class="category-card p-2 rounded">
+                <img src="https://etherealbyug.com/wp-content/uploads/2025/01/43d800c8-a974-40ca-bd7e-f647640c0dbf-300x300.jpg" class="img-fluid rounded shadow-sm mb-2" alt="Rings">
+                <h6 class="fw-semibold text-uppercase category-title">Ring</h6>
+            </div>
+          </a>
+        </div>
+  
+        <!-- Category 2: Necklace -->
+        <div class="col-6 col-sm-4 col-md-3 text-center">
+            <a href="{% url 'product' 'Necklace' %}">
+            <div class="category-card p-2 rounded">
+                <img src="https://etherealbyug.com/wp-content/uploads/2025/01/IMG_2712-300x300.jpg" class="img-fluid rounded shadow-sm mb-2" alt="Necklace">
+                <h6 class="fw-semibold text-uppercase category-title">Necklace</h6>
+            </div>
+            </a>
+        </div>
+  
+        <!-- Category 3: Hair Accessories -->
+        <div class="col-6 col-sm-4 col-md-3 text-center">
+          <a href="{% url 'product' 'Bracelet' %}">
+
+          <div class="category-card p-2 rounded">
+            <img src="https://etherealbyug.com/wp-content/uploads/2025/01/IMG_2816-e1737187124905-300x300.jpg" class="img-fluid rounded shadow-sm mb-2" alt="Hair Accessories">
+            <h6 class="fw-semibold text-uppercase category-title">Earring</h6>
+          </div>
+          </a>
+        </div>
+        
+        <!-- Category 4: Earrings -->
+        <div class="col-6 col-sm-4 col-md-3 text-center">
+          <a href="{% url 'product' 'Earring' %}">
+            <div class="category-card p-2 rounded">
+                <img src="https://etherealbyug.com/wp-content/uploads/2025/01/Untitled-design-11-e1737187250487-300x300.jpg" class="img-fluid rounded shadow-sm mb-2" alt="Earrings">
+                <h6 class="fw-semibold text-uppercase category-title">Earrings</h6>
+            </div>
+          </a>
+        </div>
+  
+    </div>
+  </div>
+  </section>
+
+  <section class="features py-5">
+    <div class="container">
+      <div class="row">
+        
+        <!-- Target Audience -->
+        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="0">
+          <div class="py-5">
+            <svg width="38" height="38" viewBox="0 0 24 24">
+              <use xlink:href="#users"></use>
+            </svg>
+            <h4 class="element-title text-capitalize my-3">Our Muse</h4>
+            <p>Women aged 21-60 — students, homemakers, business professionals, and NRIs — who value quality, craftsmanship, and affordable luxury.</p>
+          </div>
+        </div>
+  
+        <!-- What Makes Us Unique -->
+        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="300">
+          <div class="py-5">
+            <svg width="38" height="38" viewBox="0 0 24 24">
+              <use xlink:href="#star"></use>
+            </svg>
+            <h4 class="element-title text-capitalize my-3">Why Choose Us?</h4>
+            <p>Affordable luxury that uplifts every mood, style, and personality. Handcrafted, hypoallergenic, modern heirlooms & everyday essentials.</p>
+          </div>
+        </div>
+  
+        <!-- Main Goal -->
+        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="600">
+          <div class="py-5">
+            <svg width="38" height="38" viewBox="0 0 24 24">
+              <use xlink:href="#shopping-cart"></use>
+            </svg>
+            <h4 class="element-title text-capitalize my-3">Our Goal</h4>
+            <p>Help clients browse our thoughtfully curated collections and convert their experience into joyful purchases. Sales + Brand Love!</p>
+          </div>
+        </div>
+  
+        <!-- Shipping & Returns -->
+        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="900">
+          <div class="py-5">
+            <svg width="38" height="38" viewBox="0 0 24 24">
+              <use xlink:href="#truck"></use>
+            </svg>
+            <h4 class="element-title text-capitalize my-3">Shipping & Returns</h4>
+            <p>Free domestic shipping. International shipping free above ₹15,000. No returns unless damaged (video proof required).</p>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  </section>
+  
+
+  <section class="categories overflow-hidden py-5">
+    <div class="container">
+      <div class="open-up" data-aos="zoom-out">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="cat-item image-zoom-effect">
+              <div class="image-holder">
+                <a href="{% url 'product' 'Men' %}">
+                  <img src="{% static 'images/cat-item14.jpeg' %}" alt="categories" class="product-image img-fluid">
+                </a>
+              </div>
+              <div class="category-content">
+                <div class="product-button">
+                  <a href="{% url 'product' 'Men' %}" class="btn btn-common text-uppercase">Shop for men</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="cat-item image-zoom-effect">
+              <div class="image-holder">
+                <a href="{% url 'product' 'Women' %}">
+                  <img src="{% static 'images/cat-item15.jpeg' %}" alt="categories" class="product-image img-fluid">
+                </a>
+              </div>
+              <div class="category-content">
+                <div class="product-button">
+                  <a href="{% url 'product' 'Women' %}" class="btn btn-common text-uppercase">Shop for women</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="cat-item image-zoom-effect">
+              <div class="image-holder">
+                <a href="{% url 'product' 'Kids' %}">
+                  <img src="{% static 'images/cat-item8.jpeg' %}" alt="categories" class="product-image img-fluid">
+                </a>
+              </div>
+              <div class="category-content">
+                <div class="product-button">
+                  <a href="{% url 'product' 'Kids' %}" class="btn btn-common text-uppercase">Shop for kids</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ 
+
+  <section id="new-arrival" class="new-arrival product-carousel py-5 position-relative overflow-hidden">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mt-5 mb-3">
+        <h4 class="text-uppercase">Our New Arrivals</h4>
+        <a href="{% url 'product' category='None' %}" class="btn-link">View All Products</a>
+      </div>
+      <div class="swiper product-swiper open-up" data-aos="zoom-out">
+        <div class="swiper-wrapper d-flex">
+          {% for product in new_arrivals %}
+
+          <div class="swiper-slide">
+            <div class="product-item image-zoom-effect link-effect">
+              <div class="image-holder position-relative">
+                <a href="{% url 'new_arrival' product.id %}">
+                  <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image img-fluid">
+                </a>
+                {% comment %} <a href="index.html" class="btn-icon btn-wishlist">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <use xlink:href="#heart"></use>
+                  </svg>
+                </a> {% endcomment %}
+                <div class="product-content">
+                  <h5 class="element-title text-uppercase fs-5 mt-3">
+                    <a href="{% url 'new_arrival' product.id %}">{{ product.name }}</a>
+                  </h5>
+                  <a href="{% url 'new_arrival' product.id %}" class="text-decoration-none" data-after="Add to cart"><span>{{ product.price }}</span></a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          {% endfor %}
+         
+        <div class="swiper-pagination"></div>
+      </div>
+      {% comment %} <div class="icon-arrow icon-arrow-left"><svg width="50" height="50" viewBox="0 0 24 24">
+          <use xlink:href="#arrow-left"></use>
+        </svg></div>
+      <div class="icon-arrow icon-arrow-right"><svg width="50" height="50" viewBox="0 0 24 24">
+          <use xlink:href="#arrow-right"></use>
+        </svg></div> {% endcomment %}
+    </div>
+  </section>
+  
+
+  <section class="collection bg-light2 position-relative py-5">
+    <div class="container">
+      <div class="row">
+        <div class="title-xlarge text-uppercase txt-fx domino">Collection</div>
+        <div class="collection-item d-flex flex-wrap my-5">
+          <div class="col-md-6 column-container">
+            <div class="image-holder">
+              <img src="{% static 'images/cat-large-item3.jpg' %}" alt="collection" class="product-image img-fluid">
+            </div>
+          </div>
+          <div class="col-md-6 column-container bg-white">
+            <div class="collection-content p-5 m-0 m-md-5">
+              <h3 class="element-title text-uppercase">Jewellery Collection</h3>
+              <p>Discover affordable luxury designed for every mood, style, and personality. From effortless everyday essentials to bold statement pieces, each jewel tells a story of craftsmanship and elegance. Our 18k gold vermeil and real stone creations are hypoallergenic, anti-tarnish, and crafted to be cherished for years to come.</p>
+              <a href="#" class="btn btn-dark text-uppercase mt-3">Shop Collection</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="best-sellers" class="best-sellers product-carousel py-5 position-relative overflow-hidden">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mt-5 mb-3">
+        <h4 class="text-uppercase">Best Selling Items</h4>
+        <a href="{% url 'product' category='All' %}" class="btn-link">View All Products</a>
+      </div>
+  
+      <div class="swiper product-swiper open-up" data-aos="zoom-out">
+        <div class="swiper-wrapper d-flex">
+  
+          {% for product in best_products %}
+          <div class="swiper-slide">
+            <div class="product-item image-zoom-effect link-effect">
+              <div class="image-holder">
+                <a href="{% url 'best_product_page' product.id %}">
+                  <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image img-fluid">
+                </a>
+                <div class="product-content">
+                  <h5 class="text-uppercase fs-5 mt-3">
+                    <a href="{{ product.link|default:'#' }}">{{ product.name }}</a>
+                  </h5>
+                  <a href="{{ product.link|default:'#' }}" class="text-decoration-none" data-after="Add to cart">
+                    <span>{{ product.price }}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+  
+        </div>
+  
+        <div class="swiper-pagination"></div>
+      </div>
+  
+      <div class="icon-arrow icon-arrow-left">
+        <svg width="50" height="50" viewBox="0 0 24 24">
+          <use xlink:href="#arrow-left"></use>
+        </svg>
+      </div>
+      <div class="icon-arrow icon-arrow-right">
+        <svg width="50" height="50" viewBox="0 0 24 24">
+          <use xlink:href="#arrow-right"></use>
+        </svg>
+      </div>
+    </div>
+  </section>
+  
+
+
+
+
+  <section class="testimonials py-5 bg-light">
+    <div class="section-header text-center mt-5">
+      <h3 class="section-title">OUR CUSTOMERS SHINE WITH LOVE</h3>
+    </div>
+    <div class="swiper testimonial-swiper overflow-hidden my-5">
+      <div class="swiper-wrapper d-flex">
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p>“Absolutely stunning! The necklace I bought sparkles beautifully and arrived in such elegant packaging.”</p>
+              <div class="review-title text-uppercase">Sophia R.</div>
+            </blockquote>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p>“I wore the earrings to my wedding — they were delicate, timeless, and made me feel truly special.”</p>
+              <div class="review-title text-uppercase">Amira W.</div>
+            </blockquote>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p>“This bracelet is a masterpiece. The craftsmanship is flawless — I get compliments every time I wear it.”</p>
+              <div class="review-title text-uppercase">Priya D.</div>
+            </blockquote>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p>“I gifted the gold pendant to my mother — she teared up. It’s more than jewelry; it’s memory.”</p>
+              <div class="review-title text-uppercase">Daniel M.</div>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-swiper-pagination d-flex justify-content-center mb-5"></div>
+  </section>
+  
+  
+  
+  <script>
+    function dismissPromo() {
+      localStorage.setItem('promo_shown', 'true');
+    }
+  
+    document.addEventListener("DOMContentLoaded", function () {
+      const alreadyShown = localStorage.getItem('promo_shown');
+      if (!alreadyShown) {
+        const promoModal = new bootstrap.Modal(document.getElementById('promoModal'));
+        promoModal.show();
+      }
+  
+      // AJAX form submit
+      const form = document.getElementById('subscribeForm');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+  
+        const formData = new FormData(form);
+        const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+  
+        fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken
+          },
+          body: formData
+        })
+        .then(response => {
+          if (response.ok) {
+            form.classList.add('d-none');
+            document.getElementById('thankYouMessage').classList.remove('d-none');
+            document.getElementById('promoModalLabel').textContent = "✅ Subscribed!";
+          } else {
+            alert("Something went wrong. Please try again.");
+          }
+        });
+      });
+    });
+  </script>
+  
+  
+{% include 'footer.html' %}
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/plugins.js' %}"></script>
+  <script src="{% static 'js/SmoothScroll.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+  <script src="{% static 'js/script.min.js' %}"></script>
+
+<!-- Bootstrap 5 JS Bundle (includes Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html> 

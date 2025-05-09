@@ -1,0 +1,136 @@
+{% extends 'admin/admin.html' %}
+{% block title %}Add Product{% endblock %}
+{% block content %}
+    <h2>Add New Jewelry Product</h2>
+    
+    <form method="POST" action="{% url 'add_best_product' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label">Product Name</label>
+            <input type="text" class="form-control" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="gender_category" class="form-label">Gender Category</label>
+            <select class="form-control" name="gender_category" required>
+                <option value="Men">Men</option>
+                <option value="Women">Women</option>
+                <option value="Kids">Kids</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="category" class="form-label">Jewelry Category</label>
+            <select class="form-control" name="category" required>
+                <option value="Ring">Ring</option>
+                <option value="Necklace">Necklace</option>
+                <option value="Earring">Earring</option>
+                <option value="Bracelet">Bracelet</option>
+            </select>
+        </div>
+
+        <!-- Jewelry-Specific Color Selection -->
+        <div class="mb-3">
+            <label for="color" class="form-label">Select Jewelry Color</label>
+            <div class="d-flex align-items-center">
+                <input type="color" class="form-control form-control-color me-2" id="colorPicker" value="#FFD700">
+                <select class="form-control select2" id="colorDropdown">
+                    <option value="">-- Search or Select Jewelry Color --</option>
+                    <option value="Gold" data-color="#FFD700">Gold</option>
+                    <option value="Silver" data-color="#C0C0C0">Silver</option>
+                    <option value="Rose Gold" data-color="#B76E79">Rose Gold</option>
+                    <option value="Antique Gold" data-color="#D4AF37">Antique Gold</option>
+                    <option value="Bronze" data-color="#8A7967">Bronze</option>
+                    <option value="Platinum" data-color="#E5E4E2">Platinum</option>
+                    <option value="Copper" data-color="#AA6C39">Copper</option>
+                    <option value="Ruby Red" data-color="#E0115F">Ruby Red</option>
+                    <option value="Emerald Green" data-color="#7CFC00">Emerald Green</option>
+                    <option value="Sapphire Blue" data-color="#1E90FF">Sapphire Blue</option>
+                    <option value="Amethyst Purple" data-color="#9932CC">Amethyst Purple</option>
+                    <option value="Pink Diamond" data-color="#FF1493">Pink Diamond</option>
+                    <option value="Pearl White" data-color="#FFFFFF">Pearl White</option>
+                    <option value="Onyx Black" data-color="#000000">Onyx Black</option>
+                </select>
+            </div>
+            <!-- Hidden input field to store final color value -->
+            <input type="hidden" id="colorValue" name="color" value="#FFD700">
+        </div>
+
+        <div class="mb-3">
+            <label for="size" class="form-label">Size</label>
+            <input type="text" class="form-control" name="size" placeholder="Enter size (e.g., 6, M, 18cm)">
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" class="form-control" name="price" step="0.01" required>
+        </div>
+        <div class="mb-3">
+            <label for="stock" class="form-label">Stock</label>
+            <input type="number" class="form-control" name="stock" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Main Product Image</label>
+            <input type="file" class="form-control" name="image" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="gallery_images" class="form-label">Additional Gallery Images</label>
+            <input type="file" class="form-control" name="gallery_images" multiple>
+        </div>
+        <button type="submit" class="btn btn-success">Add Product</button>
+    </form>
+
+    <!-- Include jQuery and Select2 for searchable dropdown -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+
+    <script>
+        $(document).ready(function() {
+            // Enable searchable dropdown
+            $('#colorDropdown').select2({
+                placeholder: "Search for a jewelry color...",
+                allowClear: true
+            });
+
+            // Function to update color picker and hidden input
+            function updateColor(color) {
+                $('#colorPicker').val(color);
+                $('#colorValue').val(color);
+            }
+
+            // Handle dropdown selection
+            $('#colorDropdown').on('change', function() {
+                let selectedOption = $('#colorDropdown option:selected');
+                let selectedColor = selectedOption.data('color');
+                if (selectedColor) {
+                    updateColor(selectedColor);
+                }
+            });
+
+            // Handle color picker input
+            $('#colorPicker').on('input', function() {
+                let pickedColor = $(this).val();
+                let found = false;
+
+                // Check if picked color exists in predefined colors
+                $('#colorDropdown option').each(function() {
+                    if ($(this).data('color') === pickedColor) {
+                        $(this).prop('selected', true).trigger('change');
+                        found = true;
+                        return false;
+                    }
+                });
+
+                // If picked color is custom, reset dropdown selection
+                if (!found) {
+                    $('#colorDropdown').val("").trigger('change');
+                }
+                $('#colorValue').val(pickedColor);
+            });
+        });
+    </script>
+{% endblock %}

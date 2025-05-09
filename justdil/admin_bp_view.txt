@@ -1,0 +1,339 @@
+    
+
+def add_product(request):
+    if request.method == 'POST':
+        product_name = request.POST.get('product_name')
+        product_description = request.POST.get('product_description')
+        product_price = request.POST.get('product_price')
+        product_image = request.FILES.get('product_image')
+
+        new_product = product(
+            name=product_name,
+            description=product_description,
+            price=product_price,
+            image=product_image
+        )
+        new_product.save()
+        messages.success(request, "Product added successfully.")
+        return redirect('admin_panel')
+
+    return render(request, 'admin/admin.html')
+
+
+def dashboard(request):
+    total_products = Product.objects.count()
+    total_sales = Order.objects.aggregate(total=Sum('total'))['total'] or 0
+    total_stock = Product.objects.aggregate(total=Sum('stock'))['total'] or 0
+    recent_products = Product.objects.order_by('-id')[:5]  # Show last 5 added products
+
+    context = {
+        'total_products': total_products,
+        'total_sales': total_sales,
+        'total_stock': total_stock,
+        'recent_products': recent_products
+    }
+    
+    return render(request, "admin/dashboard.html", context)
+
+def users(request):
+    user = User.objects.all()
+    return render(request, "admin/users.html", {'users': user})
+
+def orders(request):
+    query = request.GET.get('q', '')
+    if query:
+        orders_data = Order.objects.filter(customer__icontains=query)
+    else:
+        orders_data = Order.objects.all()
+
+    return render(request, "admin/orders.html", {'orders': orders_data})
+
+
+def products(request):
+    query = request.GET.get('q', '')  # Get the search query from the request
+    if query:
+        product_list = Product.objects.filter(name__icontains=query)  # Filter products based on search query
+    else:
+        product_list = Product.objects.all()  # Show all products if no query is given
+
+    return render(request, "admin/products.html", {'products': product_list, 'query': query})
+
+def add_product(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        gender_category = request.POST['gender_category']
+        category = request.POST['category']
+        color = request.POST['color']
+        size = request.POST.get('size', '')
+        price = request.POST['price']
+        stock = request.POST['stock']
+        description = request.POST.get('description', '')
+        image = request.FILES.get('image')
+
+        product = Product.objects.create(
+            name=name,
+            gender_category=gender_category,
+            category=category,
+            color=color,
+            size=size,
+            price=price,
+            stock=stock,
+            description=description,
+            image=image
+        )
+
+        # Save multiple gallery images
+        gallery_images = request.FILES.getlist('gallery_images')
+        for img in gallery_images:
+            ProductImage.objects.create(product=product, image=img)
+
+        return redirect('products')  # or your success redirect
+    return render(request, "admin/add_product.html")
+
+
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    print(product.image)
+
+    if request.method == "POST":
+        product.name = request.POST['name']
+        product.price = request.POST['price']
+        product.stock = request.POST['stock']
+        product.size = request.POST.get('size', '')
+        
+        # Ensure color is retrieved correctly
+        color_value = request.POST.get('color', '').strip()
+        if color_value:
+            product.color = color_value
+
+        product.gender_category = request.POST.get('gender_category', '') 
+        product.category = request.POST.get('category', '')  
+        product.description = request.POST.get('description', '')  
+
+        if 'image' in request.FILES:
+            product.image = request.FILES['image']
+
+        product.save()
+        return redirect('products')
+
+    return render(request, "admin/edit_product.html", {'product': product})
+
+
+def delete_product(request, product_id):
+    product = Product.objects.get(id=product_id)
+    product.delete()
+    return redirect('products')
+
+
+def add_new_arrival(request):
+    query = request.GET.get('q', '')  # Get the search query from the request
+    if query:
+        product_list = NewProduct.objects.filter(name__icontains=query)  # Filter products based on search query
+    else:
+        product_list = NewProduct.objects.all()  # Show all products if no query is given
+
+    return render(request, "admin/new_arrival_form.html", {'products': product_list, 'query': query})
+
+def add_new_aravie(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        gender_category = request.POST['gender_category']
+        category = request.POST['category']
+        color = request.POST['color']
+        size = request.POST.get('size', '')
+        price = request.POST['price']
+        stock = request.POST['stock']
+        description = request.POST.get('description', '')
+        image = request.FILES.get('image')
+
+        product = NewProduct.objects.create(
+            name=name,
+            gender_category=gender_category,
+            category=category,
+            color=color,
+            size=size,
+            price=price,
+            stock=stock,
+            description=description,
+            image=image
+        )
+
+        # Save multiple gallery images
+        gallery_images = request.FILES.getlist('gallery_images')
+        for img in gallery_images:
+            NewProductImage.objects.create(product=product, image=img)
+
+        return redirect('add_new_arrival')  # or your success redirect
+    return render(request, "admin/add_new_Arive.html")
+
+def delete_new_arrival(request, new_arrival_id):
+    new_arrival = NewProduct.objects.get(id=new_arrival_id)
+    new_arrival.delete()
+    return redirect('add_new_arrival')
+
+
+def edit_new_arrival(request, new_arrival_id):
+    product = get_object_or_404(NewProduct, id=new_arrival_id)
+
+    if request.method == "POST":
+        product.name = request.POST['name']
+        product.price = request.POST['price']
+        product.stock = request.POST['stock']
+        product.size = request.POST.get('size', '')
+        
+        # Ensure color is retrieved correctly
+        color_value = request.POST.get('color', '').strip()
+        if color_value:
+            product.color = color_value
+
+        product.gender_category = request.POST.get('gender_category', '') 
+        product.category = request.POST.get('category', '')  
+        product.description = request.POST.get('description', '')  
+
+        if 'image' in request.FILES:
+            product.image = request.FILES['image']
+
+        product.save()
+        return redirect('add_new_arrival')
+
+    return render(request, "admin/edit_new_product.html", {'product': product})
+
+
+def best_product(request):
+    query = request.GET.get('q', '') 
+    if query:
+        product_list = BestProduct.objects.filter(name__icontains=query) 
+    else:
+        product_list = BestProduct.objects.all()  
+
+    return render(request, "admin/best_product.html", {'products': product_list, 'query': query})
+
+def add_best_product(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        gender_category = request.POST['gender_category']
+        category = request.POST['category']
+        color = request.POST['color']
+        size = request.POST.get('size', '')
+        price = request.POST['price']
+        stock = request.POST['stock']
+        description = request.POST.get('description', '')
+        image = request.FILES.get('image')
+
+        product = BestProduct.objects.create(
+            name=name,
+            gender_category=gender_category,
+            category=category,
+            color=color,
+            size=size,
+            price=price,
+            stock=stock,
+            description=description,
+            image=image
+        )
+
+        # Save multiple gallery images
+        gallery_images = request.FILES.getlist('gallery_images')
+        for img in gallery_images:
+            BestProductImage.objects.create(product=product, image=img)
+
+        return redirect('best_product')  # or your success redirect
+    return render(request, "admin/add_best_product.html")
+
+def delete_best_product(request, new_arrival_id):
+    new_arrival = BestProduct.objects.get(id=new_arrival_id)
+    new_arrival.delete()
+    return redirect('add_best_product')
+
+
+def edit_best_product(request, best_product_id):
+    product = get_object_or_404(BestProduct, id=best_product_id)
+
+    if request.method == "POST":
+        product.name = request.POST['name']
+        product.price = request.POST['price']
+        product.stock = request.POST['stock']
+        product.size = request.POST.get('size', '')
+        
+        # Ensure color is retrieved correctly
+        color_value = request.POST.get('color', '').strip()
+        if color_value:
+            product.color = color_value
+
+        product.gender_category = request.POST.get('gender_category', '') 
+        product.category = request.POST.get('category', '')  
+        product.description = request.POST.get('description', '')  
+
+        if 'image' in request.FILES:
+            product.image = request.FILES['image']
+
+        product.save()
+        return redirect('add_best_product')
+
+    return render(request, "admin/edit_best_product.html", {'product': product})
+
+
+def manage_banners(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description', '')
+        images = request.FILES.getlist('images')
+
+        for image in images[:3]:  # Limit to 3 images
+            HomeBanner.objects.create(title=title, description=description, image=image)
+
+        return redirect('manage_banners')
+
+    banners = HomeBanner.objects.all()  
+    return render(request, 'admin/manage_banners.html', {'banners': banners})
+
+
+def remove_banner(request, banner_id):
+    if request.method == 'POST':
+        # Get the banner by ID and delete it
+        banner = get_object_or_404(HomeBanner, id=banner_id)
+        banner.delete()
+
+    # Redirect back to the banners page or admin panel
+    return redirect('manage_banners')
+
+
+def edit_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    if request.method == 'POST':
+        order.first_name = request.POST['first_name']
+        order.last_name = request.POST['last_name']
+        order.email = request.POST['email']
+        order.address = request.POST['address']
+        order.city = request.POST['city']
+        order.zip_code = request.POST['zip_code']
+        order.phone = request.POST['phone']
+        order.order_status = request.POST['order_status']
+        order.save()
+        return redirect('orders')
+
+    return render(request, 'admin/edit_order.html', {'order': order})
+
+def delete_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    order.delete()
+    return redirect('orders')
+
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            # Authenticate and log the user in
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('/j_d_admin/')  # Redirect to the admin dashboard
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'admin/admin_login.html', {'form': form})

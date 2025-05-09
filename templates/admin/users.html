@@ -1,0 +1,35 @@
+{% extends 'admin/admin.html' %}
+{% block title %}Users{% endblock %}
+{% block content %}
+    <h2>Users Management</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            {% if not user.is_superuser %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <a href="{% url 'delete_user' user.id %}">
+                            <button class="btn btn-danger">Delete</button>
+                        </a>
+                    </td>
+                </tr>
+            
+            {% endif %}
+            
+           
+        {% endfor %}
+        
+        </tbody>
+    </table>
+{% endblock %}

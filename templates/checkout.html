@@ -1,0 +1,116 @@
+{% include 'nav.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">🧾 Checkout</h2>
+
+    <div class="row">
+        <!-- Billing Info Form -->
+        <div class="col-md-7">
+            <div class="card p-4 shadow-sm">
+                <h4 class="mb-3">Billing Information</h4>
+                <form method="post" action="{% url 'checkout' %}">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" id="city" name="city" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="zip" class="form-label">ZIP / Postal Code</label>
+                            <input type="text" class="form-control" id="zip" name="zip" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phone" name="phone" required>
+                        </div>
+                    </div>
+                    <!-- Razorpay Pay Button -->
+                    <div class="col-12 mt-4">
+                        <input type="submit" value="Proceed to Pay" class="btn btn-primary w-100">
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-md-5">
+            <div class="card p-4 shadow-sm">
+                <h4 class="mb-3">🛍️ Order Summary</h4>
+                {% if cart_items %}
+                <ul class="list-group mb-3">
+                    {% for item in cart_items %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <h6 class="my-0">{{ item.product.name }}</h6>
+                            <small class="text-muted">Qty: {{ item.quantity }}</small>
+                        </div>
+                        <span class="text-muted">₹{{ item.total_price }}</span>
+                    </li>
+                    {% endfor %}
+                    <li class="list-group-item d-flex justify-content-between bg-light">
+                        <strong>Total</strong>
+                        <strong>₹{{ total_price }}</strong>
+                    </li>
+                </ul>
+                {% else %}
+                <p>Your cart is empty.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Razorpay Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    {% if razorpay_order_id %}
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var options = {
+          "key": "{{ razorpay_key_id }}",
+          "amount": "{{ total_price|floatformat:0 }}00",
+          "currency": "INR",
+          "name": "Just Lib Bling",
+          "description": "Order Payment",
+          "order_id": "{{ razorpay_order_id }}",
+          "handler": function (response){
+            window.location.href = "{% url 'order_success' %}?payment_id=" + response.razorpay_payment_id;
+          },
+          "prefill": {
+            "name": "{{ request.user.get_full_name }}",
+            "email": "{{ request.user.email }}"
+          },
+          "theme": {
+            "color": "#c29e75"
+          }
+        };
+        var rzp = new Razorpay(options);
+        rzp.open();
+      });
+    </script>
+    {% endif %}
+    
+</script>
+{% endblock %}
+
+{% include 'footer.html' %}

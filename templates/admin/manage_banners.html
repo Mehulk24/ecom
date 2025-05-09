@@ -1,0 +1,118 @@
+{% extends 'admin/admin.html' %}
+{% load static %}
+{% block title %}Manage Banners{% endblock %}
+
+{% block content %}
+
+<style>
+    .banner-form-container {
+        max-width: 700px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .banner-form-container h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .form-control:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .btn-custom {
+        width: 100%;
+        padding: 10px;
+        font-weight: 600;
+        border-radius: 10px;
+    }
+
+    .current-banners img {
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .banner-card {
+        border: 1px solid #eee;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .banner-card:hover {
+        transform: scale(1.01);
+    }
+</style>
+
+<div class="container my-5">
+
+    {% if messages %}
+    <div class="alert alert-success mt-4">
+        {% for message in messages %}
+            {{ message }}<br>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="banner-form-container">
+        <h2>🖼️ Add New Home Banners</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_title" class="form-label">Title</label>
+                <input type="text" name="title" id="id_title" class="form-control" placeholder="Enter banner title" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_description" class="form-label">Description</label>
+                <textarea name="description" id="id_description" class="form-control" rows="3" placeholder="Short banner description (optional)"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_images" class="form-label">Banner Images</label>
+                <input type="file" name="images" id="id_images" class="form-control" accept="image/*" multiple required>
+            </div>
+
+            <div class="d-flex gap-3">
+                <button type="submit" class="btn btn-primary btn-custom">Add Banners</button>
+                <a href="{% url 'j_d_admin' %}" class="btn btn-secondary btn-custom">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    {% if banners %}
+    <div class="mt-5">
+        <h4 class="text-center mb-4">🎞️ Current Banners</h4>
+        <div class="row g-4 current-banners">
+            {% for banner in banners %}
+            <div class="col-md-4">
+                <div class="banner-card p-2">
+                    <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+                    <div class="p-2">
+                        <h6>{{ banner.title }}</h6>
+                        <small>{{ banner.description }}</small>
+                        <form method="POST" action="{% url 'remove_banner' banner.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm mt-2">Remove</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

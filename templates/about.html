@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About Us | Just Lil Bling</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff;
+    }
+    h1, h2, h3 {
+      color: #d4af37;
+    }
+    .section-heading {
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+    }
+    .highlight {
+      color: #d4af37;
+    }
+    .divider {
+      width: 60px;
+      height: 4px;
+      background: #d4af37;
+      margin: 0 auto 1.5rem;
+    }
+    .about-section {
+      padding: 60px 0;
+    }
+    .about-section:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+    .founder-img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+{% load static %}
+{% include 'nav.html' %}
+  <div class="container about-section text-center">
+    <h1 class="section-heading">Welcome to <span class="highlight">Just Lil Bling</span></h1>
+    <div class="divider"></div>
+    <p class="lead">An online jewellery store for every mood, style, and personality. <strong>Affordable luxury</strong> that won’t break your bank, yet adds timeless value to your collection.</p>
+  </div>
+
+  <div class="container about-section">
+    <h2 class="section-heading text-center">Our Audience</h2>
+    <div class="divider"></div>
+    <p>We cater to women aged between 21–60 — from students and homemakers to working professionals and NRI shoppers. If you love unique pieces, appreciate craftsmanship, and have a budget of ₹1000+ per item — we’re made for you!</p>
+  </div>
+
+  <div class="container about-section">
+    <h2 class="section-heading text-center">What Makes Us Unique?</h2>
+    <div class="divider"></div>
+    <p>Our collections are not just jewellery — they are <strong>experiences</strong>. Every piece reflects individuality, modern style, and the essence of affordable elegance.</p>
+    <ul>
+      <li>18k gold vermeil and gold-filled finishes</li>
+      <li>Anti-tarnish, hypoallergenic, and nickel-free</li>
+      <li>Real stones and handcrafted artisan designs</li>
+    </ul>
+  </div>
+
+  <div class="container about-section">
+    <h2 class="section-heading text-center">Our Collections</h2>
+    <div class="divider"></div>
+    <h5 class="mt-3">✨ Effortless Everyday Essentials</h5>
+    <p>Modern, chic, and made for daily glam. These are your go-to styles — fashionable and timeless.</p>
+    <h5 class="mt-4">🌟 Tribe</h5>
+    <p>Bold statement pieces — modern heirlooms crafted with real stones and love from our artisans.</p>
+  </div>
+
+  <div class="container about-section">
+    <h2 class="section-heading text-center">Shipping & Returns</h2>
+    <div class="divider"></div>
+    <p><strong>Domestic Shipping:</strong> Free on all orders. Delivery within 1–5 days. Mumbai orders arrive the next day!</p>
+    <p><strong>International Shipping:</strong> Free above ₹15,000. Delivered within 15 days.</p>
+    <p><strong>Returns:</strong> No returns/exchange/cancellation unless damaged (with unboxing video). Replacement or store credit available.</p>
+  </div>
+
+  <div class="container about-section">
+    <h2 class="section-heading text-center">Jewellery Care Tips</h2>
+    <div class="divider"></div>
+    <ul>
+      <li>Avoid perfumes, hairsprays, and lotions.</li>
+      <li>Remove jewellery before bathing or swimming.</li>
+      <li>Clean gently with a soft cloth.</li>
+      <li>Store in ziplock bags or pouches — keep dry and separate.</li>
+    </ul>
+    <p>Our jewellery is built to last, but a little love goes a long way!</p>
+  </div>
+
+  <div class="container about-section">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h2 class="section-heading">Meet the Founder</h2>
+        <p><strong>Hetal Bhatt</strong>, founder of Just Lil Bling & Just Lil Bling Kids, is passionate about creating a joyful accessory experience. After becoming a mom, Hetal expanded the brand to include handcrafted hair clips, toys, and accessories for kids — each made with love by skilled homemakers.</p>
+        <p>Hetal’s vision is to offer style, quality, and comfort — all wrapped in excellent customer service. Her mission? To turn every purchase into a cherished memory.</p>
+      </div>
+      {% comment %} <div class="col-md-6 text-center">
+        <img src="https://via.placeholder.com/400x400?text=Founder+Image" alt="Hetal Bhatt" class="founder-img">
+      </div> {% endcomment %}
+    </div>
+  </div>
+
+  {% include 'footer.html' %}
+  <footer class="text-center p-4 mt-5 bg-light">
+    <p class="mb-0">&copy; 2025 Just Lil Bling. All Rights Reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

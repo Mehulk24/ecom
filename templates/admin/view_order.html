@@ -1,0 +1,58 @@
+{% extends 'admin/admin.html' %}
+{% block title %}Order #{{ order.order_number }} Details{% endblock %}
+{% block content %}
+
+<h2 class="mb-4">Order Details - #{{ order.order_number }}</h2>
+
+<!-- Customer & Order Info -->
+<div class="mb-4">
+    <h5>Customer Info</h5>
+    <p><strong>Name:</strong> {{ order.first_name }}</p>
+    <p><strong>Email:</strong> {{ order.user.email }}</p>
+    <p><strong>Order Date:</strong> {{ order.order_date }}</p>
+    <p><strong>Status:</strong>
+        {% if order.order_status == "Pending" %}
+            <span class="badge bg-warning text-dark">Pending</span>
+        {% elif order.order_status == "Shipped" %}
+            <span class="badge bg-primary">Shipped</span>
+        {% elif order.order_status == "Delivered" %}
+            <span class="badge bg-success">Delivered</span>
+        {% elif order.order_status == "Cancelled" %}
+            <span class="badge bg-danger">Cancelled</span>
+        {% else %}
+            <span class="badge bg-secondary">{{ order.order_status }}</span>
+        {% endif %}
+    </p>
+</div>
+
+<!-- Ordered Products Table -->
+<h5>Ordered Products</h5>
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Product</th>
+            <th>Price (₹)</th>
+            <th>Quantity</th>
+            <th>Subtotal (₹)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in order_items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>₹{{ item.price|floatformat:2 }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.price|floatformat:2|add:"0"|floatformat:2|floatformat:2|add:item.quantity|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Total -->
+<div class="text-end">
+    <h5><strong>Total:</strong> ₹{{ order.total|floatformat:2 }}</h5>
+</div>
+
+<a href="{% url 'orders' %}" class="btn btn-secondary mt-3">Back to Orders</a>
+
+{% endblock %}
