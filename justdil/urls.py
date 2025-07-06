@@ -27,7 +27,16 @@ urlpatterns = [
     path('subscribe_email/', views.subscribe_email, name='subscribe_email'),
     path('verify_otp/', views.otp, name='verify_otp'),
     path('resend_otp/', views.resend_otp, name='resend_otp'),
-
+    path('apply_coupon/', views.apply_coupon, name='apply_coupon'),
+    path('shipping_returns/', views.shipping_returns, name='shipping_returns'),
+    path('founder/', views.founder, name='founder'),
+    path('remove_coupon/', views.remove_c, name='remove_c'),
+    path('404/', views.e_404, name='e_404'),
+    path('favorites/', views.favorite_list, name='favorite_list'),
+    path('favorites/add/<str:model_name>/<int:object_id>/', views.add_to_favorites, name='add_to_favorites'),
+    path('favorites/remove/<str:model_name>/<int:object_id>/', views.remove_from_favorites, name='remove_from_favorites'),
+    path('select/',views.select, name='select'),
+    path('Hampers/', views.hand_collection, name='hampers'),
 
 
     #Admin
@@ -38,7 +47,7 @@ urlpatterns = [
     path('orders/', views.orders, name='orders'),
     path('products/', views.products, name='products'),
     path('add_product/', views.add_product, name='add_product'),
-    path('edit_product/<int:product_id>/', views.edit_product, name='edit_product'),
+    path('edit_product/<str:model_type>/<int:product_id>/', views.edit_product, name='edit_product'),
 
     path('delete_product/<int:product_id>/', views.delete_product, name='delete_product'),
     path('new-arrivals/add/', views.add_new_arrival, name='add_new_arrival'),
@@ -54,6 +63,7 @@ urlpatterns = [
     path('edit_order/<int:order_id>/', views.edit_order, name='edit_order'),
     path('delete_order/<int:order_id>/', views.delete_order, name='delete_order'),
     path('orders/<int:order_id>/view/', views.view_order, name='view_order'),
+    path('products/toggle/<int:product_id>/', views.toggle_visibility, name='toggle_visibility'),
     path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

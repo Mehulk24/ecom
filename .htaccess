@@ -1,0 +1,4 @@
+Alias /static/ /home/justlilbling/ecom/staticfiles/
+<Directory /home/justlilbling/ecom/staticfiles/>
+    Require all granted
+</Directory>

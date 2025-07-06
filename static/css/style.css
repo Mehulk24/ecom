@@ -21,9 +21,11 @@ CSS STRUCTURE:
 1. VARIABLES
 2. GENERAL TYPOGRAPHY
 
+
+
 --------------------------------------------------------------*/
 body {
-  --heading-font: " Baskerville Old Face, serif", Roboto, sans-serif;
+  /* --heading-font: "itc-johnston", sans-serif; */
   --heading-font-weight: 400;
   --heading-color: #111;
   --heading-line-height: 1.24;
@@ -31,7 +33,7 @@ body {
   --swiper-theme-color: #8C907E;
 
   /* bootstrap */
-  --bs-body-font-family: "Jost", Roboto, sans-serif;
+  /* --bs-body-font-family: "itc-johnston", sans-serif; */
   --bs-body-font-size: 18px;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
@@ -701,7 +703,7 @@ a {
   margin-bottom: 10px;
   font-size: 0.6em;
   font-weight: normal;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   letter-spacing: 0.1em;
 }
 .search-popup .cat-list {
@@ -1152,7 +1154,7 @@ a {
   left: 0;
   font-size: 1rem;
   text-align: inherit;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   transition: inherit;
 }
 
@@ -1363,7 +1365,7 @@ a {
   font-size: 0.875rem;
   font-family: var(--bs-body-font-family);
   letter-spacing: 0.0875rem;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   text-decoration: none;
 }
 

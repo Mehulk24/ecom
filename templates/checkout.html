@@ -2,8 +2,23 @@
 {% load static %}
 
 {% block content %}
+
+
+<!--<div id="alert-container">-->
+<!--    {% if messages %}-->
+<!--      {% for message in messages %}-->
+<!--        <div class="alert floating-alert -->
+<!--          {% if message.tags == 'success' %}alert-success-->
+<!--          {% elif message.tags == 'error' %}alert-danger-->
+<!--          {% elif message.tags == 'warning' %}alert-warning-->
+<!--          {% else %}alert-info{% endif %}" role="alert">-->
+<!--          <p class="mb-0">{{ message }}</p>-->
+<!--        </div>-->
+<!--      {% endfor %}-->
+<!--    {% endif %}-->
+<!--  </div>-->
 <div class="container my-5">
-    <h2 class="text-center mb-4">🧾 Checkout</h2>
+    <h2 class="text-center mb-4"> Checkout</h2>
 
     <div class="row">
         <!-- Billing Info Form -->
@@ -42,10 +57,12 @@
                             <input type="text" class="form-control" id="phone" name="phone" required>
                         </div>
                     </div>
+
+
+                   
                     <!-- Razorpay Pay Button -->
                     <div class="col-12 mt-4">
                         <input type="submit" value="Proceed to Pay" class="btn btn-primary w-100">
-
                     </div>
                 </form>
             </div>
@@ -58,19 +75,53 @@
                 {% if cart_items %}
                 <ul class="list-group mb-3">
                     {% for item in cart_items %}
-                    <li class="list-group-item d-flex justify-content-between">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="my-0">{{ item.product.name }}</h6>
                             <small class="text-muted">Qty: {{ item.quantity }}</small>
                         </div>
-                        <span class="text-muted">₹{{ item.total_price }}</span>
+                        <div class="text-end">
+                            {% if item.discount > 0 %}
+                            <small class="text-muted">Original: ₹{{ item.total_price }}</small><br>
+                            <strong>₹{{ item.total }}</strong><br>
+                            {% else %}
+                            <strong>₹{{ item.total }}</strong>
+                            {% endif %}
+                        </div>
                     </li>
                     {% endfor %}
+                    {% if discount_price == 0 %}
+
+                    {% else %}
+                    <small class="text-success">You saved ₹{{ discount_price }}</small>
+                    {% endif %}
                     <li class="list-group-item d-flex justify-content-between bg-light">
                         <strong>Total</strong>
-                        <strong>₹{{ total_price }}</strong>
+
+                        <strong>₹{{ total_price  }}</strong>
+
                     </li>
                 </ul>
+                
+                <form method="post" action="{% url 'apply_coupon' %}">
+                    {% csrf_token %}
+                    <!-- Promocode Input -->
+                    <div class="col-12 mt-4">
+                        <label for="promocode" class="form-label">Have a Promocode?</label>
+                        <div class="input-group">
+                            <input type="hidden" name="cart" value="{{ total_price}}">
+                            <input type="text" class="form-control" id="promocode" name="coupon" placeholder="Enter code">
+                            {% if discount_price %}
+                            <a href="{% url 'remove_c' %}" class="btn btn-outline-danger">Remove</a>
+                            {% else %}
+                            <button type="submit" class="btn btn-outline-secondary">Apply</button>
+                            {% endif %}
+                        </div>
+                           
+                        </div>
+                        
+                    </div>
+ 
                 {% else %}
                 <p>Your cart is empty.</p>
                 {% endif %}
@@ -83,34 +134,44 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     {% if razorpay_order_id %}
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
         var options = {
-          "key": "{{ razorpay_key_id }}",
-          "amount": "{{ total_price|floatformat:0 }}00",
-          "currency": "INR",
-          "name": "Just Lib Bling",
-          "description": "Order Payment",
-          "order_id": "{{ razorpay_order_id }}",
-          "handler": function (response){
-            window.location.href = "{% url 'order_success' %}?payment_id=" + response.razorpay_payment_id;
-          },
-          "prefill": {
-            "name": "{{ request.user.get_full_name }}",
-            "email": "{{ request.user.email }}"
-          },
-          "theme": {
-            "color": "#c29e75"
-          }
+            "key": "{{ razorpay_key_id }}",
+            "amount": "{{ total|floatformat:0 }}00",
+            "currency": "INR",
+            "name": "Just Lil Bling",
+            "description": "Order Payment",
+            "order_id": "{{ razorpay_order_id }}",
+            "handler": function (response) {
+                window.location.href = "{% url 'order_success' %}?payment_id=" + response.razorpay_payment_id;
+            },
+            "prefill": {
+                "name": "{{ request.user.get_full_name }}",
+                "email": "{{ request.user.email }}"
+            },
+            "theme": {
+                "color": "#c29e75"
+            }
         };
+
         var rzp = new Razorpay(options);
         rzp.open();
-      });
-    </script>
+
+    });
     {% endif %}
-    
+    document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            document.querySelectorAll('.floating-alert').forEach(function (alert) {
+                alert.style.transition = 'opacity 0.5s ease-out';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 2000);
+    });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+crossorigin="anonymous"></script>
 {% endblock %}
 
 {% include 'footer.html' %}

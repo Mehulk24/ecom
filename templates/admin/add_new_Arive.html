@@ -12,18 +12,33 @@
         <div class="mb-3">
             <label for="gender_category" class="form-label">Gender Category</label>
             <select class="form-control" name="gender_category" required>
-                <option value="Men">Men</option>
                 <option value="Women">Women</option>
+                <option value="Men">Men</option>
                 <option value="Kids">Kids</option>
             </select>
         </div>
         <div class="mb-3">
             <label for="category" class="form-label">Jewelry Category</label>
             <select class="form-control" name="category" required>
+                <option value="Earring">Earring</option>
                 <option value="Ring">Ring</option>
                 <option value="Necklace">Necklace</option>
-                <option value="Earring">Earring</option>
                 <option value="Bracelet">Bracelet</option>
+                <option value="Jewellery_Sets">Jewellery Sets</option>
+                <option value="Jewellery">Jewellery</option>
+                <option value="Hair_Accessories">Hair_Accessories</option>
+                <option value="Toys">Toys</option>
+                <option value="Bags&More">Bags&More</option>
+
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="type" class="form-label">Jewelry Type</label>
+            <select class="form-control" name="type" required>
+                <option value="e3">E3</option>
+                <option value="tribe">Tribe</option>
+               
+
             </select>
         </div>
 
@@ -34,6 +49,21 @@
                 <input type="color" class="form-control form-control-color me-2" id="colorPicker" value="#FFD700">
                 <select class="form-control select2" id="colorDropdown">
                     <option value="">-- Search or Select Jewelry Color --</option>
+                
+                    <!-- Basic Colors -->
+                    <option value="Red" data-color="#FF0000">Red</option>
+                    <option value="Green" data-color="#008000">Green</option>
+                    <option value="Blue" data-color="#0000FF">Blue</option>
+                    <option value="Yellow" data-color="#FFFF00">Yellow</option>
+                    <option value="Black" data-color="#000000">Black</option>
+                    <option value="White" data-color="#FFFFFF">White</option>
+                    <option value="Orange" data-color="#FFA500">Orange</option>
+                    <option value="Purple" data-color="#800080">Purple</option>
+                    <option value="Pink" data-color="#FFC0CB">Pink</option>
+                    <option value="Brown" data-color="#A52A2A">Brown</option>
+                    <option value="Gray" data-color="#808080">Gray</option>
+                
+                    <!-- Existing Jewelry Colors -->
                     <option value="Gold" data-color="#FFD700">Gold</option>
                     <option value="Silver" data-color="#C0C0C0">Silver</option>
                     <option value="Rose Gold" data-color="#B76E79">Rose Gold</option>
@@ -49,6 +79,7 @@
                     <option value="Pearl White" data-color="#FFFFFF">Pearl White</option>
                     <option value="Onyx Black" data-color="#000000">Onyx Black</option>
                 </select>
+                
             </div>
             <!-- Hidden input field to store final color value -->
             <input type="hidden" id="colorValue" name="color" value="#FFD700">
@@ -68,7 +99,13 @@
             <input type="number" class="form-control" name="stock" required>
         </div>
         <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
+            <label for="discount" class="form-label">Discount</label>
+            <div class="mb-3">
+                <input type="text" class="form-control" name="p_discount" placeholder="Discount Percentage (0-100)" value="0">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Meterial</label>
             <textarea class="form-control" name="description" rows="3"></textarea>
         </div>
         <div class="mb-3">

@@ -2,7 +2,7 @@
 <html lang="en">
 {% load static %}
 <head>
-  <title>Product Details - Just lib bling</title>
+  <title>Product Details - Just Lil Bling</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,10 +25,34 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     
+
+    <style>
+  
+
+      .img-fluidim{
+        height: 215px; 
+        border-radius: 150%;
+      }
+
+      @media (max-width: 767.98px) {
+      .img-fluidim{
+        height: 150px; 
+        border-radius: 150%;
+      }
+      }
+
+      .icon-instagram {
+  color: #E1306C;
+}
+
+.icon-whatsapp {
+  color: #25D366;
+}
+    </style>
 </head>
 
 <body>
-  <footer id="footer" class="mt-5">
+  <footer class="footer1" id="footer" class="mt-5">
     <div class="container">
       <div class="row d-flex flex-wrap justify-content-between py-5">
         
@@ -36,14 +60,14 @@
         <div class="col-md-3 col-sm-6">
           <div class="footer-menu footer-menu-001">
             <div class="footer-intro mb-4">
-              <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
-                <img src="{% static 'images/logo.jpg' %}" alt="Just Lib Bling Logo" class="img-fluid" style="height: 215px; border-radius: 150%;">
+              <a class="navbar-brand im d-flex align-items-center" href="{% url 'index' %}">
+                <img src="{% static 'images/logo.jpg' %}" alt="Just Lil Bling Logo" class="img-fluidim" >
               </a>
             </div>
-            <p>Celebrate your shine with Just Lib Bling. Crafted for elegance, designed to inspire. Discover jewellery that complements every moment and every story.</p>
+            <p>Affordable Luxury That Won't Break Your Bank!</p>
             <div class="social-links">
               <ul class="list-unstyled d-flex flex-wrap gap-3">
-                <li>
+                {% comment %} <li>
                   <a href="https://facebook.com/yourpage" class="text-secondary" target="_blank" title="Facebook">
                     <i class="fab fa-facebook fa-2x"></i>
                   </a>
@@ -62,17 +86,17 @@
                   <a href="https://pinterest.com/yourpage" class="text-secondary" target="_blank" title="Pinterest">
                     <i class="fab fa-pinterest fa-2x"></i>
                   </a>
-                </li>
-                <li>
-                  <a href="https://instagram.com/yourpage" class="text-secondary" target="_blank" title="Instagram">
-                    <i class="fab fa-instagram fa-2x"></i>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://wa.me/yourwhatsappphonenumber" class="text-secondary" target="_blank" title="WhatsApp">
-                    <i class="fab fa-whatsapp fa-2x"></i>
-                  </a>
-                </li>
+                </li> {% endcomment %}
+               <li>
+  <a href="https://instagram.com/justlilbling" target="_blank" title="Instagram">
+    <i class="fab fa-instagram fa-2x icon-instagram"></i>
+  </a>
+</li>
+<li>
+  <a href="https://wa.me/918291499828" target="_blank" title="WhatsApp">
+    <i class="fab fa-whatsapp fa-2x icon-whatsapp"></i>
+  </a>
+</li>
               </ul>
             </div>
           </div>
@@ -87,38 +111,37 @@
                 <a href="{% url 'index' %}" class="item-anchor">Home</a>
               </li>
               <li class="menu-item">
-                <a href="{% url 'product' 'Man' %}" class="item-anchor">Men's Jewellery</a>
+                <a href="{% url 'product' 'Women' %}" class="item-anchor">Women's Jewellery</a>
               </li>
               <li class="menu-item">
-                <a href="{% url 'product' 'Women' %}" class="item-anchor">Women's Jewellery</a>
+                <a href="{% url 'product' 'Man' %}" class="item-anchor">Men's Jewellery</a>
               </li>
               <li class="menu-item">
                 <a href="{% url 'product' 'Kids' %}" class="item-anchor">Kids' Collection</a>
               </li>
-              <li class="menu-item">
-                <a href="{% url 'about' %}" class="item-anchor">About Us</a>
-              </li>
             </ul>
           </div>
         </div>
-  
+        
         <!-- Customer Care -->
         <div class="col-md-3 col-sm-6">
           <div class="footer-menu footer-menu-003">
-            <h5 class="widget-title text-uppercase mb-4">Customer Care</h5>
+            <h5 class="widget-title text-uppercase mb-4">Information</h5>
             <ul class="menu-list list-unstyled text-uppercase border-animation-left fs-6">
+              <li class="menu-item">
+                <a href="{% url 'about' %}" class="item-anchor">About Us</a>
+              </li>
+              <li class="menu-item">
+                <a href="{% url 'shipping_returns' %}" class="item-anchor">shipping & returns</a>
+              </li>
+              <li class="menu-item">
+               <a href="{% url 'founder' %}" class="item-anchor">founder</a>
+             </li>
+              
               <li class="menu-item">
                 <a href="{% url 'faq' %}" class="item-anchor">FAQs</a>
               </li>
-              {% comment %} <li class="menu-item">
-                <a href="{% url 'contact' %}" class="item-anchor">Contact Us</a>
-              </li>
-              <li class="menu-item">
-                <a href="{% url 'shipping' %}" class="item-anchor">Shipping Info</a>
-              </li>
-              <li class="menu-item">
-                <a href="{% url 'returns' %}" class="item-anchor">Returns & Exchanges</a>
-              </li> {% endcomment %}
+              
             </ul>
           </div>
         </div>

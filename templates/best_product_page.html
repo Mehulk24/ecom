@@ -2,36 +2,62 @@
 <html lang="en">
 {% load static %}
 <head>
-  <title>{{ product.name }} - Just Lib Bling</title>
+  <title>{{ product.name }} - Just Lil Bling</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <!-- Custom CSS -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  
   <style>
     .image-holder img,
-  .gallery-thumbnails img {
-    transition: transform 0.3s ease;
-    cursor: zoom-in;
-  }
+    .gallery-thumbnails img {
+      transition: transform 0.3s ease;
+      cursor: zoom-in;
+    }
 
-  .image-holder img:hover,
-  .gallery-thumbnails img:hover {
-    transform: scale(1.2); /* You can adjust scale as needed */
-    z-index: 10;
-  }
+    .image-holder img:hover,
+    .gallery-thumbnails img:hover {
+      transform: scale(1.2);
+      z-index: 10;
+    }
 
-  .gallery-thumbnails div {
-    transition: transform 0.3s ease;
-  }
+    .gallery-thumbnails div {
+      transition: transform 0.3s ease;
+    }
 
-  .gallery-thumbnails div:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  }
-    </style>
+    .gallery-thumbnails div:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .btn-check:checked + .btn-outline-dark {
+      background-color: black;
+      color: white;
+    }
+
+    .input-group button {
+      width: 40px;
+    }
+
+    .no-hover:hover {
+      background-color: transparent !important;
+      color: inherit !important;
+      border-color: inherit !important;
+      box-shadow: none !important;
+      text-decoration: none !important;
+    }
+    
+  </style>
 </head>
 <body>
   {% include 'nav.html' %}
+
+  <!-- Modal for Zoom -->
   <div class="modal fade" id="imageZoomModal" tabindex="-1" aria-labelledby="imageZoomLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content bg-transparent border-0">
@@ -42,51 +68,176 @@
     </div>
   </div>
 
+  <!-- Product Section -->
   <section id="product-details" class="py-5">
     <div class="container">
       <div class="row">
+        
+        <!-- Product Images -->
         <div class="col-md-6">
-          <div class="col-md-6">
-            <div class="image-holder mb-3" style="overflow: hidden; border-radius: 10px;">
-              <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid w-100" style="border-radius: 10px;" onclick="openZoomModal(this.src)">
+          <div class="image-holder mb-3" style="overflow: hidden; border-radius: 10px;">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid w-100" style="border-radius: 10px;" onclick="openZoomModal(this.src)">
+          </div>
 
-            </div>
-          
-            <!-- Gallery Images -->
-            {% if product.gallery_images.all %}
-            <div class="gallery-thumbnails d-flex flex-wrap gap-2">
-              {% for img in product.gallery_images.all %}
+          {% if product.gallery_images.all %}
+          <div class="gallery-thumbnails d-flex flex-wrap gap-2">
+            {% for img in product.gallery_images.all %}
               <div style="width: 100px; height: 100px; border: 1px solid #ddd; border-radius: 5px; overflow: hidden;">
                 <img src="{{ img.image.url }}" alt="Gallery" style="width: 100%; height: 100%; object-fit: cover;" onclick="openZoomModal(this.src)">
               </div>
             {% endfor %}
-            </div>
-            {% endif %}
           </div>
+          {% endif %}
         </div>
+
+        <!-- Product Content -->
         <div class="col-md-6">
           <div class="product-content py-4">
-            <h1 class="element-title text-uppercase">{{ product.name }}</h1>
+            <h1 class="element-title">{{ product.name }}</h1>
+            <h2 class="fs-4 fw-semibold mb-3">Rs. {{ product.price|floatformat:2 }}</h2>
+        
+            <!-- Colour -->
+            <div class="mb-3">
+              <label class="form-label d-block mb-2">Colour</label>
+              <button type="button" class="btn btn-outline-dark no-hover rounded-pill px-4">{{ product.get_color_display }}</button>
+            </div>
+        
+            <!-- Form Start -->
+            <form method="post" action="{% url 'add_to_cart' 'bestproduct' product.id %}">
+              {% csrf_token %}
+              
+              <!-- Size -->
+              <div class="mb-3">+
+                <label class="form-label d-block mb-2">Size</label>
+        
+                {% if product.category == 'Ring' %}
+                  <div class="btn-group" role="group">
+                    <input type="radio" class="btn-check" name="size_radio" id="size6" value="6" checked>
+                    <label class="btn btn-outline-dark rounded-pill px-4" for="size6">6</label>
+        
+                    <input type="radio" class="btn-check" name="size_radio" id="size7" value="7">
+                    <label class="btn btn-outline-dark rounded-pill px-4" for="size7">7</label>
+        
+                    <input type="radio" class="btn-check" name="size_radio" id="size8" value="8">
+                    <label class="btn btn-outline-dark rounded-pill px-4" for="size8">8</label>
+                  </div>
+        
+                  <!-- Hidden input to capture selected size -->
+                  <input type="hidden" name="size" id="selectedSize" value="6">
+        
+                  <script>
+                    // Update hidden size value when selection changes
+                    document.querySelectorAll('input[name="size_radio"]').forEach((radio) => {
+                      radio.addEventListener('change', function () {
+                        document.getElementById('selectedSize').value = this.value;
+                      });
+                    });
+                  </script>
+                {% else %}
+                  <p class="text-muted">Free Size</p>
+                  <input type="hidden" name="size" value="{{ product.size }}">
+                {% endif %}
+              </div>
+        
+              <!-- Add to Cart Button -->
+              <div class="d-grid gap-2 mb-2">
+                <button type="submit" class="btn btn-outline-dark no-hover btn-lg">Add to cart</button>
+                <a href="{% url 'add_to_favorites' 'bestproduct' product.id %}" class="btn  no-hover btn-outline-danger btn-lg">Add to Wishlist <i class="bi bi-heart fs-4"></i></a>
+              </div>
+            </form>
+            <!-- Form End -->
+        
+            <!-- Description -->
+            <p class="mt-4">{{ product.description }}</p>
             <p class="category"><strong>Category:</strong> {{ product.get_category_display }}</p>
             <p class="gender"><strong>For:</strong> {{ product.get_gender_category_display }}</p>
-            <p class="color"><strong>Color:</strong> <span style="color: {{ product.color }};">&#11044;</span> {{ product.get_color_display }}</p>
-            <p class="price"><strong>Price:</strong> ₹{{ product.price }}</p>
-            <p class="stock"><strong>In Stock:</strong> {{ product.stock }}</p>
-            
-            {% if product.size %}
-            <p class="size"><strong>Size:</strong> {{ product.size }}</p>
-            {% endif %}
-
-            <p class="description">{{ product.description }}</p>
-            
-            <div class="btn-left mt-4">
-              <a href="{% url 'add_to_cart' 'bestproduct' product.id %}" class="btn btn-primary text-uppercase">Add to Cart</a>
-          </div>
+        
+            <!-- Accordion (materials, dimensions, returns, etc.) stays the same... -->
           </div>
         </div>
+        
+            
+
+            <!-- Highlights -->
+            {% comment %} <div class="d-flex justify-content-between text-center my-4">
+              <div>
+                <i class="bi bi-shield-check fs-4"></i><br>
+                <small>1 Year Warranty</small>
+              </div>
+              <div>
+                <i class="bi bi-box-arrow-left fs-4"></i><br>
+                <small>30 Day Returns</small>
+              </div>
+              <div>
+                <i class="bi bi-credit-card fs-4"></i><br>
+                <small>Secure Payments</small>
+              </div>
+            </div> {% endcomment %}
+
+            <!-- Buttons -->
+        
+            
+
+            <!-- Extra Info -->
+          
+      <div class="accordion mt-5" id="productAccordion">
+
+        <!-- Materials -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingMaterials">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMaterials">
+              <i class="bi bi-box me-2"></i> Materials
+            </button>
+          </h2>
+          <div id="collapseMaterials" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+            <div class="accordion-body">
+              Our jewellery is crafted from high-quality materials such as titanium steel, stainless steel, and brass. Each material is selected for its durability, hypoallergenic properties, and long-lasting beauty. Please refer to our Materials & Care to learn more.
+            </div>
+          </div>
+        </div>
+
+    
+
+        <!-- Returns -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingReturns">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReturns">
+              <i class="bi bi-arrow-return-left me-2"></i> Returns Policy
+            </button>
+          </h2>
+          <div id="collapseReturns" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+            <div class="accordion-body">
+              We do not offer returns or exchanges unless the item is damaged. You must send us an uncut unboxing video within 2 days of delivery for a valid claim. For more information, please refer to our <a href="{% url 'shipping_returns' %}">Shipping & Returns Guide
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipping -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingShipping">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseShipping">
+              <i class="bi bi-truck me-2"></i> Shipping
+            </button>
+          </h2>
+          <div id="collapseShipping" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+            <div class="accordion-body">
+              Orders are processed within 2 business days. Domestic deliveries take 1–5 days. If you're in Mumbai, expect your order the next day!
+            </div>
+          </div>
+        </div>
+
+        <!-- Warranty -->
+       
+
       </div>
     </div>
   </section>
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Zoom Modal Script -->
   <script>
     function openZoomModal(src) {
       const zoomedImage = document.getElementById("zoomedImage");
@@ -95,6 +246,7 @@
       modal.show();
     }
   </script>
+
   {% include 'footer.html' %}
 </body>
 </html>

@@ -1,112 +1,155 @@
 {% extends 'admin/admin.html' %}
 {% block title %}Edit Product{% endblock %}
 {% block content %}
-    <h2>Edit Product</h2>
+<h2>Edit Product</h2>
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="name" class="form-label">Product Name</label>
-            <input type="text" class="form-control" name="name" value="{{ product.name }}" required>
-        </div>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="name" class="form-label">Product Name</label>
+        <input type="text" class="form-control" name="name" value="{{ product.name }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="gender_category" class="form-label">Gender Category</label>
+        <select class="form-control" name="gender_category" required>
+            <option value="Men" {% if product.gender_category == "Men" %}selected{% endif %}>Men</option>
+            <option value="Women" {% if product.gender_category == "Women" %}selected{% endif %}>Women</option>
+            <option value="Kids" {% if product.gender_category == "Kids" %}selected{% endif %}>Kids</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="category" class="form-label">Jewelry Category</label>
+        <select class="form-control" name="category" required>
+            <option value="Earring" {% if product.category == "Earring" %}selected{% endif %}>Earring</option>
+            <option value="Ring" {% if product.category == "Ring" %}selected{% endif %}>Ring</option>
+            <option value="Necklace" {% if product.category == "Necklace" %}selected{% endif %}>Necklace</option>
+            <option value="Bracelet" {% if product.category == "Bracelet" %}selected{% endif %}>Bracelet</option>
+            <option value="Jewellery_Sets" {% if product.category == "Jewellery_Sets" %}selected{% endif %}>Jewellery Sets</option>
+            <option value="Jewellery" {% if product.category == "Jewellery" %}selected{% endif %}>Jewellery</option>
+            <option value="Hair_Accessories" {% if product.category == "Hair_Accessories" %}selected{% endif %}>Hair Accessories</option>
+            <option value="Toys" {% if product.category == "Toys" %}selected{% endif %}>Toys</option>
+            <option value="Bags&More" {% if product.category == "Bags&More" %}selected{% endif %}>Bags & More</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="color" class="form-label">Color</label>
+        <input type="hidden" id="colorValue" name="color" value="{{ product.color }}">
+        <input type="color" class="form-control form-control-color mb-2" id="colorPicker" value="{{ product.color }}" required>
+        <select class="form-control select2" id="colorDropdown">
+            <option value="">-- Search or Select Jewelry Color --</option>
         
-        <div class="mb-3">
-            <label for="gender_category" class="form-label">Gender Category</label>
-            <select class="form-control" name="gender_category" required>
-                <option value="Men" {% if product.gender_category == "Men" %}selected{% endif %}>Men</option>
-                <option value="Women" {% if product.gender_category == "Women" %}selected{% endif %}>Women</option>
-                <option value="Kids" {% if product.gender_category == "Kids" %}selected{% endif %}>Kids</option>
-            </select>
-        </div>
+            <!-- Basic Colors -->
+            <option value="Red" data-color="#FF0000">Red</option>
+            <option value="Green" data-color="#008000">Green</option>
+            <option value="Blue" data-color="#0000FF">Blue</option>
+            <option value="Yellow" data-color="#FFFF00">Yellow</option>
+            <option value="Black" data-color="#000000">Black</option>
+            <option value="White" data-color="#FFFFFF">White</option>
+            <option value="Orange" data-color="#FFA500">Orange</option>
+            <option value="Purple" data-color="#800080">Purple</option>
+            <option value="Pink" data-color="#FFC0CB">Pink</option>
+            <option value="Brown" data-color="#A52A2A">Brown</option>
+            <option value="Gray" data-color="#808080">Gray</option>
+        
+            <!-- Existing Jewelry Colors -->
+            <option value="Gold" data-color="#FFD700">Gold</option>
+            <option value="Silver" data-color="#C0C0C0">Silver</option>
+            <option value="Rose Gold" data-color="#B76E79">Rose Gold</option>
+            <option value="Antique Gold" data-color="#D4AF37">Antique Gold</option>
+            <option value="Bronze" data-color="#8A7967">Bronze</option>
+            <option value="Platinum" data-color="#E5E4E2">Platinum</option>
+            <option value="Copper" data-color="#AA6C39">Copper</option>
+            <option value="Ruby Red" data-color="#E0115F">Ruby Red</option>
+            <option value="Emerald Green" data-color="#7CFC00">Emerald Green</option>
+            <option value="Sapphire Blue" data-color="#1E90FF">Sapphire Blue</option>
+            <option value="Amethyst Purple" data-color="#9932CC">Amethyst Purple</option>
+            <option value="Pink Diamond" data-color="#FF1493">Pink Diamond</option>
+            <option value="Pearl White" data-color="#FFFFFF">Pearl White</option>
+            <option value="Onyx Black" data-color="#000000">Onyx Black</option>
+        </select>
+        
+        <div class="form-text">You can select from predefined colors or use the color picker.</div>
+    </div>
 
-        <div class="mb-3">
-            <label for="category" class="form-label">Jewelry Category</label>
-            <select class="form-control" name="category" required>
-                <option value="Ring" {% if product.category == "Ring" %}selected{% endif %}>Ring</option>
-                <option value="Necklace" {% if product.category == "Necklace" %}selected{% endif %}>Necklace</option>
-                <option value="Earring" {% if product.category == "Earring" %}selected{% endif %}>Earring</option>
-                <option value="Bracelet" {% if product.category == "Bracelet" %}selected{% endif %}>Bracelet</option>
-            </select>
-        </div>
+    <div class="mb-3">
+        <label for="size" class="form-label">jewellery type</label>
+        <input type="text" class="form-control" name="type" value="{{ product.j_type }}">
+    </div>
 
-        <div class="mb-3">
-            <label for="color" class="form-label">Color</label>
-            <input type="hidden" id="colorValue" name="color" value="{{ product.color }}">
-            <input type="color" class="form-control form-control-color" id="colorPicker" value="{{ product.color }}" required>        
-            <select class="form-control select2" id="colorDropdown">
-                <option value="">-- Search or Select Jewelry Color --</option>
-                <option value="Gold" data-color="#FFD700" {% if product.color == "#FFD700" %}selected{% endif %}>Gold</option>
-                <option value="Silver" data-color="#C0C0C0" {% if product.color == "#C0C0C0" %}selected{% endif %}>Silver</option>
-                <option value="Rose Gold" data-color="#B76E79" {% if product.color == "#B76E79" %}selected{% endif %}>Rose Gold</option>
-                <option value="Antique Gold" data-color="#D4AF37" {% if product.color == "#D4AF37" %}selected{% endif %}>Antique Gold</option>
-                <option value="Bronze" data-color="#8A7967" {% if product.color == "#8A7967" %}selected{% endif %}>Bronze</option>
-                <option value="Platinum" data-color="#E5E4E2" {% if product.color == "#E5E4E2" %}selected{% endif %}>Platinum</option>
-                <option value="Copper" data-color="#AA6C39" {% if product.color == "#AA6C39" %}selected{% endif %}>Copper</option>
-            </select>
-            <div class="form-text">You can select from predefined colors or use the color picker.</div>
-        </div>
-        <div class="mb-3">
-            <label for="size" class="form-label">Size</label>
-            <input type="text" class="form-control" name="size" value="{{ product.size }}">
-        </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">Price (₹)</label>
+        <input type="number" class="form-control" name="price" step="0.01" value="{{ product.price }}" required>
+    </div>
 
-        <div class="mb-3">
-            <label for="price" class="form-label">Price (₹)</label>
-            <input type="number" class="form-control" name="price" step="0.01" value="{{ product.price }}" required>
-        </div>
+    <div class="mb-3">
+        <label for="discount" class="form-label">Discount (%)</label>
+        <input type="number" class="form-control" name="p_discount" min="0" max="100" value="{{ product.discount }}">
+    </div>
 
-        <div class="mb-3">
-            <label for="stock" class="form-label">Stock</label>
-            <input type="number" class="form-control" name="stock" value="{{ product.stock }}" required>
-        </div>
+    <div class="mb-3">
+        <label for="stock" class="form-label">Stock</label>
+        <input type="number" class="form-control" name="stock" value="{{ product.stock }}" required>
+    </div>
 
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" name="description" rows="3">{{ product.description }}</textarea>
-        </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Mterial</label>
+        <textarea class="form-control" name="description" rows="3">{{ product.description }}</textarea>
+    </div>
 
-        <div class="mb-3">
-            <label for="image" class="form-label">Product Image</label>
-            <input type="file" class="form-control" name="image">
-            {% if product.image %}
-                <img src="{{ product.image.url }}" alt="Current Image" class="mt-2" width="100">
-            {% endif %}
-        </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Product Image</label>
+        <input type="file" class="form-control" name="image">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="Current Image" class="mt-2 img-fluid rounded" style="max-width: 150px;">
+        {% endif %}
+    </div>
 
+    <button type="submit" class="btn btn-success">Update Product</button>
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+</form>
 
-        <button type="submit" class="btn btn-success">Update Product</button>
-        <a href="{% url 'add_new_arrival' %}" class="btn btn-secondary">Cancel</a>
-    </form>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const colorPicker = document.getElementById("colorPicker");
+        const colorDropdown = document.getElementById("colorDropdown");
+        const colorValueInput = document.getElementById("colorValue");
+        const initialColor = "{{ product.color }}";
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const colorPicker = document.getElementById("colorPicker");
-            const colorDropdown = document.getElementById("colorDropdown");
-            const colorValueInput = document.getElementById("colorValue");
+        // Set dropdown option selected based on product.color
+        for (let option of colorDropdown.options) {
+            if (option.getAttribute("data-color") === initialColor) {
+                option.selected = true;
+                break;
+            }
+        }
 
-            colorDropdown.addEventListener("change", function () {
-                const selectedOption = colorDropdown.options[colorDropdown.selectedIndex];
-                const selectedColor = selectedOption.getAttribute("data-color");
-                if (selectedColor) {
-                    colorPicker.value = selectedColor;
-                    colorValueInput.value = selectedColor;
-                }
-            });
-
-            colorPicker.addEventListener("input", function () {
-                colorValueInput.value = colorPicker.value;
-                let found = false;
-                for (let option of colorDropdown.options) {
-                    if (option.getAttribute("data-color") === colorPicker.value) {
-                        option.selected = true;
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    colorDropdown.value = "";
-                }
-            });
+        colorDropdown.addEventListener("change", function () {
+            const selectedOption = colorDropdown.options[colorDropdown.selectedIndex];
+            const selectedColor = selectedOption.getAttribute("data-color");
+            if (selectedColor) {
+                colorPicker.value = selectedColor;
+                colorValueInput.value = selectedColor;
+            }
         });
-    </script>
+
+        colorPicker.addEventListener("input", function () {
+            colorValueInput.value = colorPicker.value;
+            let found = false;
+            for (let option of colorDropdown.options) {
+                if (option.getAttribute("data-color") === colorPicker.value) {
+                    option.selected = true;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                colorDropdown.value = "";
+            }
+        });
+    });
+</script>
 {% endblock %}

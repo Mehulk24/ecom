@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1rdovw3x2*2id^!h7b*dghawh6pcyr^ea#=b9f_ki1g4-*x6(w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]  # Allow all hosts for development purposes
+ALLOWED_HOSTS = ["www.justlilbling.com",'127.0.0.1',"https://www.justlilbling.com","justlilbling.com","*"]  # Allow all hosts for development purposes
 
 
 # Application definition
@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'ecom.custom_404_middleware.Custom404Middleware',
 ]
 
 ROOT_URLCONF = 'ecom.urls'
@@ -128,6 +129,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 MEDIA_URL = '/products_image/'
 MEDIA_ROOT = BASE_DIR / 'products_image'

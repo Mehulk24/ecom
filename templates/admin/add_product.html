@@ -12,49 +12,76 @@
         <div class="mb-3">
             <label for="gender_category" class="form-label">Gender Category</label>
             <select class="form-control" name="gender_category" required>
-                <option value="Men">Men</option>
                 <option value="Women">Women</option>
+                <option value="Men">Men</option>
                 <option value="Kids">Kids</option>
             </select>
         </div>
+
+        <div class="mb-3">
+            <label for="color_count" class="form-label">How many colors?</label>
+            <select id="color_count" class="form-select" onchange="generateColorFields()">
+                <option value="">-- Select Number of Colors --</option>
+                {% for i in "12345678910"|make_list %}
+                  <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+              </select>
+          </div>
+          
+          <div id="color_fields" class="row g-2"></div>
+        <div class="mb-3">
+            <label class="form-label d-block">Product Categories</label>
+          
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="product_category" value="Just_in" id="cat_justin">
+              <label class="form-check-label" for="cat_justin">Just_in</label>
+            </div>
+          
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="product_category" value="Loved_by_You" id="cat_loved">
+              <label class="form-check-label" for="cat_loved">Loved by You</label>
+            </div>
+          
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="product_category" value="Saturday_Story_Sale" id="cat_sale">
+              <label class="form-check-label" for="cat_sale">Saturday Story Sale</label>
+            </div>
+          
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="product_category" value="Normal_Product" id="cat_normal">
+              <label class="form-check-label" for="cat_normal">Normal Product</label>
+            </div>
+          </div>
         <div class="mb-3">
             <label for="category" class="form-label">Jewelry Category</label>
             <select class="form-control" name="category" required>
+                <option value="Earring">Earring</option>
                 <option value="Ring">Ring</option>
                 <option value="Necklace">Necklace</option>
-                <option value="Earring">Earring</option>
                 <option value="Bracelet">Bracelet</option>
+                <option value="Jewellery-Sets">Jewellery Sets</option>
+                <option value="Jewellery">Jewellery</option>
+                <option value="Hair-Accessories">Hair_Accessories</option>
+                <option value="Toys">Toys</option>
+                <option value="Bags&More">Bags&More</option>
+                <option value="Essentials">Essentials</option>
+
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="type" class="form-label">Jewelry Type</label>
+            <select class="form-control" name="type" required>
+                <option value="e3">E3</option>
+                <option value="tribe">Tribe</option>
+                <option value="tribe">None</option>
+               
+
             </select>
         </div>
 
-        {% comment %} <!-- Jewelry-Specific Color Selection -->
-        <div class="mb-3">
-            <label for="color" class="form-label">Select Jewelry Color</label>
-            <div class="d-flex align-items-center">
-                <input type="color" class="form-control form-control-color me-2" id="colorPicker" value="#FFD700">
-                <select class="form-control select2" id="colorDropdown">
-                    <option value="">-- Search or Select Jewelry Color --</option>
-                    <option value="Gold" data-color="#FFD700">Gold</option>
-                    <option value="Silver" data-color="#C0C0C0">Silver</option>
-                    <option value="Rose Gold" data-color="#B76E79">Rose Gold</option>
-                    <option value="Antique Gold" data-color="#D4AF37">Antique Gold</option>
-                    <option value="Bronze" data-color="#8A7967">Bronze</option>
-                    <option value="Platinum" data-color="#E5E4E2">Platinum</option>
-                    <option value="Copper" data-color="#AA6C39">Copper</option>
-                    <option value="Ruby Red" data-color="#E0115F">Ruby Red</option>
-                    <option value="Emerald Green" data-color="#7CFC00">Emerald Green</option>
-                    <option value="Sapphire Blue" data-color="#1E90FF">Sapphire Blue</option>
-                    <option value="Amethyst Purple" data-color="#9932CC">Amethyst Purple</option>
-                    <option value="Pink Diamond" data-color="#FF1493">Pink Diamond</option>
-                    <option value="Pearl White" data-color="#FFFFFF">Pearl White</option>
-                    <option value="Onyx Black" data-color="#000000">Onyx Black</option>
-                </select>
-            </div>
-            <!-- Hidden input field to store final color value -->
-            <input type="hidden" id="colorValue" name="color" value="#FFD700">
-        </div>
+       
 
-        <div class="mb-3">
+        {% comment %} <div class="mb-3">
             <label for="size" class="form-label">Size</label>
             <input type="text" class="form-control" name="size" placeholder="Enter size (e.g., 6, M, 18cm)">
         </div> {% endcomment %}
@@ -68,7 +95,14 @@
             <input type="number" class="form-control" name="stock" required>
         </div>
         <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
+            <label for="discount" class="form-label">Discount</label>
+            <div class="mb-3">
+                <input type="text" class="form-control" name="p_discount" placeholder="Discount Percentage (0-100)" value="0">
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label for="description" class="form-label">Meterial</label>
             <textarea class="form-control" name="description" rows="3"></textarea>
         </div>
         <div class="mb-3">
@@ -132,5 +166,23 @@
                 $('#colorValue').val(pickedColor);
             });
         });
+
+        function generateColorFields() {
+            const container = document.getElementById('color_fields');
+            const count = parseInt(document.getElementById('color_count').value);
+            container.innerHTML = ''; // Clear previous fields
+        
+            if (!isNaN(count)) {
+              for (let i = 1; i <= count; i++) {
+                const inputDiv = document.createElement('div');
+                inputDiv.className = 'col-md-6';
+        
+                inputDiv.innerHTML = `
+                  <input type="text" name="color_name_${i}" class="form-control" placeholder="Enter Color Name ${i}" required>
+                `;
+                container.appendChild(inputDiv);
+              }
+            }
+          }
     </script>
 {% endblock %}

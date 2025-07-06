@@ -9,4 +9,6 @@ admin.site.register(Order)
 admin.site.register(OrderItem)
 admin.site.register(Cart)
 admin.site.register(NewProduct)
-
+admin.site.register(Coupon)
+admin.site.register(ProductColor)
+admin.site.register(CategoryTag)
